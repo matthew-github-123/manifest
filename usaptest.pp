@@ -1,8 +1,6 @@
 class usaptest {
- 
-#TASK 1
 
-#2 - ssh key
+#TASK 1
 
   user { 'becca':   ensure => present,
     		    managehome => true,    
@@ -24,6 +22,11 @@ class usaptest {
 		    groups => ['trucks', 'cars', 'ambulances'],
 		    password => '$1$oRKnT248$8OZSU09IWKbQ4MMXpruDp/',
 		    uid => '10031364',}
+			
+ # ssh_authorized_key { 'ec2-user@ip-172-31-16-175.us-west-2.compute.internal':		ensure => present,
+ #											user => 'wilma',
+ #											type => 'ssh-rsa',
+ #											key => ,}
 
   group { 'cars':   	ensure => present,}
   group { 'sysadmin':   ensure => present,} 
@@ -32,32 +35,34 @@ class usaptest {
 
 #TASK 2
 
-#3 - not started 
-
 #TASK 3
 
-#4 - rpm download or not?
-#5 - remaining packages
-
-  package { 'openssl': 		ensure => installed,}
-  package { 'httpd':   		ensure => installed,}
-  package { 'mysql-server': 	ensure => installed,}
-  package { 'mysql-client':	ensure => installed,}
-  package { 'tigervnc-server':	ensure => installed,}
-  package { 'tmux':		ensure => installed,} 
-  package { 'lynx':		ensure => installed,}
-  package { 'gcc':		ensure => installed,}
-  package { 'gdb':		ensure => installed,}
-  package { 'cgdb':		ensure => installed,}
-  package { 'vim':    		ensure => installed,}
-  package { 'emacs':		ensure => installed,}
-  package { 'fuse-sshfs':	provider => 'rpm', 
-				ensure => installed, 
-   				source => 'fuse-sshfs-2.5-1.el7.rf.x86_64.rpm',}
-
+		package { 'openssl': 			ensure => installed,}
+  package { 'httpd':   			ensure => installed,}
+  package { 'mysql': 			ensure => installed,}	
+  package { 'tigervnc-server':		ensure => installed,}
+  package { 'tmux':			ensure => installed,} 
+  package { 'dia2code':			ensure => installed,
+					source => 'http://sourceforge.net/projects/dia2code/files/dia2code/0.8.3/dia2code-0.8.3-1.x86_64.rpm',}
+  package { 'lynx':			ensure => installed,
+					source => 'ftp://ftp.gwdg.de/opensuse/repositories/home:/TheIndifferent:/rhel7-icewm/rhel7-shared/x86_64/lynx-2.8.9-6.1.x86_64.rpm'}
+  package { 'gcc':			ensure => installed,}
+  package { 'gdb':			ensure => installed,}
+  package {'cgdb':			ensure => installed,
+					source => 'http://dl.fedoraproject.org/pub/epel/7/x86_64/c/cgdb-0.6.8-1.el7.x86_64.rpm',
+					name => 'cgdb',}
+  package { 'vim':    			ensure => installed,}
+  package { 'emacs':			ensure => installed,}
+  package {'fuse-devel':		ensure => installed,}
+  package {'glib2-devel':		ensure => installed,}
+  exec {'install_sshfs':		command => '/etc/puppetlabs/code/environments/production/manifests/sshfs-2.8/configure',
+					cwd => '/etc/puppetlabs/code/environments/production/manifests/sshfs-2.8/',
+					refreshonly => true,}	
+				
 #TASK 4
 
-#6 - searching and replacing lines
+  augeas{"disable_root":		context   => "/etc/ssh/sshd_config",
+								changes   => "set /etc/ssh/sshd_config",}
 
   file_line { 'change DocumentRoot':
   ensure => present,
@@ -70,13 +75,19 @@ class usaptest {
 #TASK 5
 
 #7 - wait until servers back up
+					
+  host{ 'titan.csit.rmit.edu.au':   	host_aliases => 'titan',
+										ip => '131.170.5.131',}
 
-  host{ 'titan.csit.rmit.edu.au': 	host_aliases => 'titan',
-   					ip => '127.0.0.1',}
+  host{ 'saturn.csit.rmit.edu.au': 		host_aliases => 'saturn',
+										ip => '131.170.5.132',
+  }
+										
+  host{ 'jupiter.csit.rmit.edu.au': 	host_aliases => 'jupiter',
+										ip => '131.170.5.135',}
+
 
 #TASK 6 
-
-#8 - how to find correct log file
 
   notify{ 'date': 	message => "Agent run starting at ${::date}",}
 
@@ -86,15 +97,6 @@ class usaptest {
 
 #TASK 8 
 
-#9 - understand services resource more
-
   service{ 'openssl':		ensure => running,
-				enable => true,}
+							enable => true,}
 
-
-#ADDITIONAL
-#  exec { 'puppet_module_stdlib':  command => "puppet module install puppetlabs-stdlib --version 4.20.0",}
-
-
-
-}
