@@ -12,7 +12,7 @@ class usaptest {
   user{ 'fred':     ensure => present,
 		    managehome => true,
 		    home => '/home/fred',
-		    groups => ['trucks', 'cars'],
+		    groups => ['trucks', 'cars', 'wheel'],
 		    password => '$1$9n4qi3rw$Z5JPTgBmp0/1P5fUmIAAf.',    
 		    uid => '10021364',
 		    shell => '/bin/csh',}
@@ -22,7 +22,7 @@ class usaptest {
 		    groups => ['trucks', 'cars', 'ambulances'],
 		    password => '$1$oRKnT248$8OZSU09IWKbQ4MMXpruDp/',
 		    uid => '10031364',}
-			
+}			
  # ssh_authorized_key { 'ec2-user@ip-172-31-16-175.us-west-2.compute.internal':		ensure => present,
  #											user => 'wilma',
  #											type => 'ssh-rsa',
@@ -61,42 +61,42 @@ class usaptest {
 				
 #TASK 4
 
-  augeas{"disable_root":		context   => "/etc/ssh/sshd_config",
-								changes   => "set /etc/ssh/sshd_config",}
+  file_line { 'disable root':     	ensure => present,
+					replace => true,
+					path => '/etc/ssh/sshd_config',
+					line => 'PermitRootLogin no',
+					match => 'PermitRootLogin yes',}
 
-  file_line { 'change DocumentRoot':
-  ensure => present,
-  replace => true, 
-  path  => '/etc/httpd/conf/httpd.conf',
-  line  => 'DocumentRoot "/var/www/s3491364"',
-  match => '^DocumentRoot "\/var\/www\/html"',
-}
+  file_line { 'change DocumentRoot':	ensure => present,
+ 					replace => true, 
+  					path => '/etc/httpd/conf/httpd.conf',
+  					line  => 'DocumentRoot "/var/www/s3491364"',
+  					match => '^DocumentRoot "\/var\/www\/html"',}
 
 #TASK 5
 
 #7 - wait until servers back up
 					
-  host{ 'titan.csit.rmit.edu.au':   	host_aliases => 'titan',
-										ip => '131.170.5.131',}
+  #host{ 'titan.csit.rmit.edu.au':   	host_aliases => 'titan',
+#					ip => '131.170.5.131',}
 
-  host{ 'saturn.csit.rmit.edu.au': 		host_aliases => 'saturn',
-										ip => '131.170.5.132',
-  }
+ # host{ 'saturn.csit.rmit.edu.au': 	host_aliases => 'saturn',
+#					ip => '131.170.5.132',}
 										
-  host{ 'jupiter.csit.rmit.edu.au': 	host_aliases => 'jupiter',
-										ip => '131.170.5.135',}
+ # host{ 'jupiter.csit.rmit.edu.au': 	host_aliases => 'jupiter',
+#					ip => '131.170.5.135',}
 
 
 #TASK 6 
 
-  notify{ 'date': 	message => "Agent run starting at ${::date}",}
+ # notify{ 'date': 			message => "Agent run starting at ${::date}",}
 
 #TASK 7 
 
-  file { "/etc/environment": content => 'export PATH:/usr/local/bin:$PATH',}
+#  file { "/etc/environment": 		content => 'export PATH:/usr/local/bin:$PATH',}
 
 #TASK 8 
 
-  service{ 'openssl':		ensure => running,
-							enable => true,}
+#  service{ 'openssl':		ensure => running,
+#							enable => true,}
 
