@@ -21,12 +21,12 @@ class usaptest {
 		    home => '/home/wilma',
 		    groups => ['trucks', 'cars', 'ambulances'],
 		    password => '$1$oRKnT248$8OZSU09IWKbQ4MMXpruDp/',
-		    uid => '10031364',}
-}			
- # ssh_authorized_key { 'ec2-user@ip-172-31-16-175.us-west-2.compute.internal':		ensure => present,
- #											user => 'wilma',
- #											type => 'ssh-rsa',
- #											key => ,}
+		    uid => '10031364',}			
+ 
+  ssh_authorized_key { 'ec2-user@ip-172-31-16-175.us-west-2.compute.internal':		ensure => present,
+ 											user => 'wilma',
+ 											type => 'ssh-rsa',
+ 											key => 'AAAB3NzaC1yc2EAAAADAQABAAABAQCghh8RQsB0Gp9f/hwKjZRxbXuMdY4H0wQ/e7jTA/5zOgQzKBea4QGu+3BDtzJTfLjby2jIVMyLYRt4EIaM8NurZetwZSnhRDqlv5VK1Qk0CKd1MX5iFukavPjmSFIf6fMEKrw63AXeIhpxn97EfA864E6qKtIA06VijJLwYMeV+SXvIsYvlOltlXK0a2zqVNItJjbcfcpQuGxDsLrTiB2o64aHr4owqi9a0YMkf/dWl0b1p28DNc0CwTGa3NTAc2wYR98IggRrzMKxHsEhVrk1dawYjHbOhGtM0tjoa+Yj4Z8KwuZ8JXxtA2j5FCngwHD1mrHLH/7yyapa/WmiTuJH',}
 
   group { 'cars':   	ensure => present,}
   group { 'sysadmin':   ensure => present,} 
@@ -35,20 +35,26 @@ class usaptest {
 
 #TASK 2
 
+#ini_setting { 'agent_runinterval':	ensure => present,
+#					path    => "/etc/puppetlabs/puppet/puppet.conf",
+#					section => "agent",
+#					setting => "runinterval",
+#					value => "1200",}
+
 #TASK 3
 
-		package { 'openssl': 			ensure => installed,}
+  package { 'openssh': 			ensure => installed,}
   package { 'httpd':   			ensure => installed,}
   package { 'mysql': 			ensure => installed,}	
   package { 'tigervnc-server':		ensure => installed,}
   package { 'tmux':			ensure => installed,} 
   package { 'dia2code':			ensure => installed,
-					source => 'http://sourceforge.net/projects/dia2code/files/dia2code/0.8.3/dia2code-0.8.3-1.x86_64.rpm',}
+					source => 'dia-0.97.2-29.1.x86_64.rpm',}
   package { 'lynx':			ensure => installed,
 					source => 'ftp://ftp.gwdg.de/opensuse/repositories/home:/TheIndifferent:/rhel7-icewm/rhel7-shared/x86_64/lynx-2.8.9-6.1.x86_64.rpm'}
   package { 'gcc':			ensure => installed,}
   package { 'gdb':			ensure => installed,}
-  package {'cgdb':			ensure => installed,
+  package { 'cgdb':			ensure => installed,
 					source => 'http://dl.fedoraproject.org/pub/epel/7/x86_64/c/cgdb-0.6.8-1.el7.x86_64.rpm',
 					name => 'cgdb',}
   package { 'vim':    			ensure => installed,}
@@ -88,10 +94,10 @@ class usaptest {
   host{ 'jupiter.csit.rmit.edu.au': 	host_aliases => 'jupiter',
 					ip => '131.170.5.135',}
 
-
 #TASK 6 
 
- # notify{ 'date': 			message => "Agent run starting at ${::date}",}
+  $time = generate("/bin/date");	
+  notify{ 'date': 			message => "Agent run starting at ${time}",}
 
 #TASK 7 
 
@@ -101,6 +107,5 @@ class usaptest {
 
 #TASK 8 
 
-#  service{ 'openssl':		ensure => running,
-#							enable => true,}
+}
 
