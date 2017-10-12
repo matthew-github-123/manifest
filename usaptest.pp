@@ -73,18 +73,20 @@ class usaptest {
   					line  => 'DocumentRoot "/var/www/s3491364"',
   					match => '^DocumentRoot "\/var\/www\/html"',}
 
+  file_line {'becca sudo':		ensure => present,
+					path => '/etc/sudoers',
+					line => 'becca		ALL=(ALL)	NOPASSWD:ALL',}
+
 #TASK 5
-
-#7 - wait until servers back up
 					
-  #host{ 'titan.csit.rmit.edu.au':   	host_aliases => 'titan',
-#					ip => '131.170.5.131',}
+  host{ 'titan.csit.rmit.edu.au':   	host_aliases => 'titan',
+					ip => '131.170.5.131',}
 
- # host{ 'saturn.csit.rmit.edu.au': 	host_aliases => 'saturn',
-#					ip => '131.170.5.132',}
+  host{ 'saturn.csit.rmit.edu.au': 	host_aliases => 'saturn',
+					ip => '131.170.5.132',}
 										
- # host{ 'jupiter.csit.rmit.edu.au': 	host_aliases => 'jupiter',
-#					ip => '131.170.5.135',}
+  host{ 'jupiter.csit.rmit.edu.au': 	host_aliases => 'jupiter',
+					ip => '131.170.5.135',}
 
 
 #TASK 6 
@@ -93,7 +95,9 @@ class usaptest {
 
 #TASK 7 
 
-#  file { "/etc/environment": 		content => 'export PATH:/usr/local/bin:$PATH',}
+  file_line { "/etc/environment": 	ensure => present,
+					path => '/etc/environment',
+					line => 'export PATH:/usr/local/bin:$PATH',}
 
 #TASK 8 
 
